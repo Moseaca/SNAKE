@@ -48,22 +48,33 @@ let lastTick = performance.now();
 let tickEveryMs = speedForScore(config, state.score);
 
 function resize() {
-  // Fill available width while maintaining practical max height on mobile
   const dpr = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
-  const maxWidth = Math.min(window.innerWidth, 540);
-  const maxHeight = Math.min(window.innerHeight - 160, 800);
-  const portrait = window.innerHeight >= window.innerWidth;
-  const cssWidth = portrait ? maxWidth : Math.min(maxWidth, Math.floor(maxHeight * 0.7));
-  const cssHeight = portrait ? Math.min(Math.floor(cssWidth * 1.35), maxHeight) : maxHeight;
+  const container = document.querySelector('.main > div') as HTMLElement;
+  const header = document.querySelector('.header') as HTMLElement;
+  const footer = document.querySelector('.footer') as HTMLElement;
+  const containerWidth = Math.min(container?.clientWidth || window.innerWidth, 640);
+  const headerH = header?.getBoundingClientRect().height || 0;
+  const footerH = footer?.getBoundingClientRect().height || 0;
+  const verticalPadding = 48; // space around canvas and controls
+  const availH = Math.max(320, Math.min(window.innerHeight - headerH - footerH - verticalPadding, 900));
+
+  // Decide grid based on current viewport orientation
+  config = createConfig(window.innerWidth, window.innerHeight);
+  const ratio = config.rows / config.columns;
+
+  let cssWidth = containerWidth;
+  let cssHeight = Math.floor(cssWidth * ratio);
+  if (cssHeight > availH) {
+    cssHeight = Math.floor(availH);
+    cssWidth = Math.floor(cssHeight / ratio);
+  }
 
   canvas.style.width = cssWidth + 'px';
   canvas.style.height = cssHeight + 'px';
   canvas.width = Math.floor(cssWidth * dpr);
   canvas.height = Math.floor(cssHeight * dpr);
 
-  config = createConfig(cssWidth, cssHeight);
   layout = computeLayout(canvas.width, canvas.height, config);
-  // Re-render after resize
   render(ctx, state, config, layout);
 }
 
@@ -151,6 +162,16 @@ canvas.addEventListener('touchmove', (e) => {
 canvas.addEventListener('touchend', () => {
   touchStartX = 0; touchStartY = 0;
 }, { passive: true });
+
+// Canvas tap to start/pause (mobile friendly)
+canvas.addEventListener('click', () => {
+  if (!running) {
+    start();
+    msgEl.textContent = 'Vai!';
+  } else {
+    pause();
+  }
+});
 
 // Buttons
 const playBtn = document.getElementById('play') as HTMLButtonElement;

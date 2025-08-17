@@ -27,11 +27,14 @@ button {
   border-radius: 10px;
   padding: 12px 16px;
   font-weight: 700;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
 }
 
 canvas {
   display: block;
   margin: 0 auto;
+  touch-action: none;
 }
 
 .container {
@@ -49,6 +52,11 @@ canvas {
   display: grid;
   place-items: center;
   padding: 16px;
+}
+
+.controls {
+  position: relative;
+  z-index: 2;
 }
 
 
