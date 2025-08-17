@@ -17,7 +17,7 @@ appRoot.innerHTML = `
     <main class="main">
       <div>
         <canvas id="board" width="360" height="540" aria-label="Snake game board" role="img"></canvas>
-        <div style="display:flex; gap:8px; justify-content:center; margin-top:12px;">
+        <div class="controls" style="display:flex; gap:8px; justify-content:center; margin-top:12px;">
           <button id="play" type="button">Gioca</button>
           <button id="pause" type="button">Pausa</button>
           <button id="restart" type="button">Restart</button>
@@ -165,22 +165,26 @@ canvas.addEventListener('touchend', () => {
 
 // Canvas tap to start/pause (mobile friendly)
 canvas.addEventListener('click', () => {
-  if (!running) {
-    start();
-    msgEl.textContent = 'Vai!';
-  } else {
-    pause();
-  }
+  if (!running) { start(); msgEl.textContent = 'Vai!'; } else { pause(); }
 });
+canvas.addEventListener('touchstart', (e) => {
+  e.preventDefault();
+  if (!running) { start(); msgEl.textContent = 'Vai!'; } else { pause(); }
+}, { passive: false });
 
 // Buttons
 const playBtn = document.getElementById('play') as HTMLButtonElement;
 const pauseBtn = document.getElementById('pause') as HTMLButtonElement;
 const restartBtn = document.getElementById('restart') as HTMLButtonElement;
 
-playBtn.addEventListener('click', () => { start(); msgEl.textContent = 'Vai!'; });
-pauseBtn.addEventListener('click', () => pause());
-restartBtn.addEventListener('click', () => {
+function onPress(el: HTMLElement, handler: () => void) {
+  el.addEventListener('click', handler);
+  el.addEventListener('touchstart', (ev) => { ev.preventDefault(); handler(); }, { passive: false });
+}
+
+onPress(playBtn, () => { start(); msgEl.textContent = 'Vai!'; });
+onPress(pauseBtn, () => pause());
+onPress(restartBtn, () => {
   resetGame(state, config);
   scoreEl.textContent = '0';
   bestEl.textContent = String(state.bestScore);
