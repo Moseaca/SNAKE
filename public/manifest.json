@@ -1,0 +1,17 @@
+{
+  "name": "Snake Game",
+  "short_name": "Snake",
+  "description": "Classic Snake game - Mobile friendly",
+  "theme_color": "#0f172a",
+  "background_color": "#0f172a",
+  "display": "standalone",
+  "orientation": "any",
+  "start_url": "/",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}
