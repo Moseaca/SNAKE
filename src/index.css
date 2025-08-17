@@ -5,7 +5,7 @@
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  font-family: 'Press Start 2P', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
   background-color: #0f172a;
   color: #e2e8f0;
   display: flex;
@@ -33,11 +33,12 @@ h1 {
 }
 
 #game-canvas {
-  border: 2px solid #4ade80;
+  image-rendering: pixelated;
+  border: 6px solid #1c3f33;
   display: block;
   margin: 0 auto 20px;
   touch-action: none;
-  background-color: #1a1a2e;
+  background-color: #244d3f;
 }
 
 .controls {
