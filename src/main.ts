@@ -1,5 +1,6 @@
 import './index.css';
 import { createGame, moveSnake, changeDirection, draw, reset } from './simple-snake';
+import { initAudio } from './haptics';
 
 // Initialize game
 const app = document.getElementById('app') as HTMLDivElement;
@@ -41,11 +42,14 @@ function tick() {
 
 // Start/Pause game
 function toggleGame() {
+  // Initialize audio on first user interaction (needed for iOS)
+  initAudio();
+
   if (state.gameOver) {
     reset(state);
     draw(canvas, state);
   }
-  
+
   if (state.running) {
     state.running = false;
     clearInterval(gameLoop);
@@ -107,6 +111,9 @@ let touchStartX = 0;
 let touchStartY = 0;
 
 canvas.addEventListener('touchstart', (e) => {
+  // Initialize audio on first touch (needed for iOS)
+  initAudio();
+
   touchStartX = e.touches[0].clientX;
   touchStartY = e.touches[0].clientY;
 }, { passive: true });
