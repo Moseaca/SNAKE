@@ -1,4 +1,6 @@
 // Simple Snake Game - Mobile First
+import { hapticEatFood, hapticGameOver, hapticDirectionChange } from './haptics';
+
 export interface GameState {
   snake: Array<{x: number, y: number}>;
   food: {x: number, y: number};
@@ -70,6 +72,7 @@ export function moveSnake(state: GameState): void {
   if (head.x < 0 || head.x >= GRID_SIZE || head.y < 0 || head.y >= GRID_SIZE) {
     state.gameOver = true;
     state.running = false;
+    hapticGameOver();
     return;
   }
 
@@ -78,6 +81,7 @@ export function moveSnake(state: GameState): void {
     if (head.x === segment.x && head.y === segment.y) {
       state.gameOver = true;
       state.running = false;
+      hapticGameOver();
       return;
     }
   }
@@ -88,6 +92,7 @@ export function moveSnake(state: GameState): void {
   // Check food collision
   if (head.x === state.food.x && head.y === state.food.y) {
     state.score++;
+    hapticEatFood();
     // Generate new food
     do {
       state.food = {
@@ -109,9 +114,10 @@ export function changeDirection(state: GameState, newDir: 'up' | 'down' | 'left'
     'left': 'right',
     'right': 'left'
   };
-  
+
   if (opposites[newDir] !== state.direction) {
     state.nextDirection = newDir;
+    hapticDirectionChange();
   }
 }
 
